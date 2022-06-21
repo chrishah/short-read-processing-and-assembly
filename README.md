@@ -1,2 +1,81 @@
 # short-read-processing-and-assembly
 A short introduction to processing and assembly of short (Illumina) NGS sequencing data
+
+## Introduction
+
+The massively parallel generation of nucleotide sequence data has had an enormous effect on modern biology, and is commonly referred to as high-throughput sequencing or also Next generation sequencing (NGS). 
+Different sequencing instruments have specific error profiles, which are important to understand before getting started with analyses. The Illumina sequencing platform is currently the most widely used and a great option for genomic sequencing (among many other applications) with large amounts of data produced at relatively low cost. In the following part of the course you will explore some Illumina data and familiarize yourself with basic characteristics. Furthermore, there will be a brief introduction into quality filtering of Illumina data.
+
+There's a fair chance you already have some experience at the command line and you've done at least some pre-processing of read data before so the first few examples should be fairly straightforward and should simply help to get you back into the swing of things. The one major difference to what you're used to from previous sessions is probably that we'll be running all software as containerized tools through Docker. At first glance things may appear a little bit more complicated because of this, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. 
+
+If you need a recap on Docker usage, we have a tutorial for this [here](https://github.com/chrishah/docker-intro/blob/master/README.md).
+
+This tutorial is basically self contained. It ships with testdata and the only things you'll need to have setup on your machine are:
+ - Git
+ - Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3) or Singularity
+
+Start by cloning this repository:
+```bash
+(user@host)-$ git clone https://github.com/chrishah/short-read-processing-and-assembly.git
+```
+
+Move into the directory you've just downloaded:
+```bash
+(user@host)-$ cd short-read-processing-and-assembly
+```
+
+There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/master/solutions/README.md) - use them wisely ;-)
+
+Now, let's get cracking!
+
+## Illumina data basics
+
+Illumina sequence data usually comes in the so-called __fastq__ format, which can be seen as an extension of the __fasta__ format that you are already familiar with, I am sure. In addition to nucleotide sequences, fastq files also contain quality scores associated with each nucleotide. These describe the probability that a given nucleotide has been called incorrectly and are expressed as [phred scores](https://en.wikipedia.org/wiki/Phred_quality_score). A phred score of 30 (often used as ‘gold-standard’) indicates a probability of 1 in 1000 for a base to be miscalled (ie 99.9% accuracy). Phred scores are coded as single characters in ASCII format. 
+
+Let’s now get familiar with the fastq format by exploring some read data. The typical length of Illumina sequences (‘reads’) is currently 150-300 bp (depending on technology) and data usually comes in paired-ends (pe), i.e. ‘the same’ DNA fragment is sequenced from both ends. The so-called forward and reverse reads are mostly provided in two separate files (as in our case) with the first forward read pairing with the first reverse read and so on. Pairing information will also be encoded in the read headers. Depending on the length of the actual fragment the read pairs might overlap. You can identify forward/reverse reads based on a *1* or *2*, respectively, in the filename, while the remainder of the filename should be identical. 
+Fastq files usually come in compressed form (usually ‘gzipped’ indicated by a `.gz` suffix) to save space. Many programs are able to process gzipped files automatically but others are not, so make sure you know how to decompress such files on the command line (`gunzip`). Alternatively there are ways to display the content of gzipped files without actually writing a much larger decompressed version of your data onto your disk.
+
+***TASK 1***
+> Find a way to look at the first 12 lines of the compressed file (gzipped) that we provide in `data/reads.1.fastq.gz` without actually decompressing it.
+
+Now that you had your first look at a fastq file, can you find at least two differences between fasta and fastq files in terms of formatting conventions? You remember that in fasta format sequence headers (the first line of every sequence record) were characterized by `>`. What about fastq? How many lines does a single sequence in a fastq file typically have?
+
+***Task 2***
+> Given the general characteristics of fastq files can you come up with at least two ways to determine the number of sequences in the file `data/reads.1.fastq.gz` using your command line skills? 
+
+***Task 3***
+> Display the first 8 lines of the files `data/reads.1.fastq.gz` and `data/reads.2.fastq.gz` and explore in order to understand how read pairing works in Illumina paired-end data. Question: What might an ‘interleaved’ fastq file be?
+
+Now, let's have a quick look at the data quality in our files. You've probably seen [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) before so the most straightforward thing would be the following (if FastQC was installed on your machine):
+```bash
+(user@host)-$ fastqc data/reads.1.fastq.gz
+```
+
+With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC):
+```bash
+(user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
+		fastqc data/reads.1.fastq.gz
+(user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
+		fastqc data/reads.2.fastq.gz
+```
+
+Do inspect the resulting `*.html` reports.
+
+Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be done like this (to keep things clean, make a directory for the trimmed reads first): 
+```bash
+(user@host)-$ mkdir trimmed
+
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
+                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+		--out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
+```
+
+If you wanted to be a bit more explicit about how you trim you could e.g. do something like this:
+```bash
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
+                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
+                --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
+                --thread 4 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
+```
