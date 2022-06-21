@@ -40,10 +40,10 @@ Fastq files usually come in compressed form (usually ‘gzipped’ indicated by 
 
 Now that you had your first look at a fastq file, can you find at least two differences between fasta and fastq files in terms of formatting conventions? You remember that in fasta format sequence headers (the first line of every sequence record) were characterized by `>`. What about fastq? How many lines does a single sequence in a fastq file typically have?
 
-***Task 2***
+***TASK 2***
 > Given the general characteristics of fastq files can you come up with at least two ways to determine the number of sequences in the file `data/reads.1.fastq.gz` using your command line skills? 
 
-***Task 3***
+***TASK 3***
 > Display the first 8 lines of the files `data/reads.1.fastq.gz` and `data/reads.2.fastq.gz` and explore in order to understand how read pairing works in Illumina paired-end data. Question: What might an ‘interleaved’ fastq file be?
 
 Now, let's have a quick look at the data quality in our files. You've probably seen [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) before so the most straightforward thing would be the following (if FastQC was installed on your machine):
@@ -68,18 +68,18 @@ Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be do
 (user@host)-$ mkdir trimmed
 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
-                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
-		--out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
+               fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+               --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
 
 If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
-                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
-                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
-                --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
-                --thread 4 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
+               fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+               --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
+               --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
+               --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
+               --thread 4 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
 ```
 
 ## Read merging
@@ -101,10 +101,10 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
-		kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t4 @fastq.files.txt kmers.21 kmer.db.21
+               kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t4 @fastq.files.txt kmers.21 kmer.db.21
 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
-		kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
+               kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
 
 The file we have produced `kmers.21.hist.txt` is a simple text file with two columns. You could plot out the k-mer counts with e.g. `R`.
@@ -149,8 +149,8 @@ The above will work if Minia is installed on your server. As usual, we've made D
 (host)-$ mkdir minia
 
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
-        minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
-        -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 4
+          minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+          -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 4
 ```
 
 ***TASK 6***
@@ -167,9 +167,9 @@ I am assuming you've run Minia three times with different k-mers and your assemb
 
 ```bash
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-        quast -o quast_results \
-	-m 1000 --labels minia.k41,minia.k51,minia.k61 \
-        minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
+          quast -o quast_results \
+          -m 1000 --labels minia.k41,minia.k51,minia.k61 \
+          minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
 ```
 
 ***Note***

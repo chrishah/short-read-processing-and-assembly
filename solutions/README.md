@@ -53,29 +53,29 @@ done
 ***TASK 7***
 ```bash
 (user@host)-$ mkdir abyss
-(user@host)-$ mkdir abyss/abyss.51
 
+(user@host)-$ mkdir abyss/abyss.51
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
-	abyss-pe -C abyss/abyss.51 k=51 name=abyss np=4 \
-	in="/in/trimmed/reads.trimmed.pe.1.fastq.gz /in/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.51/abyss.log
+               abyss-pe -C abyss/abyss.51 k=51 name=abyss np=4 \
+               in="/in/trimmed/reads.trimmed.pe.1.fastq.gz /in/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.51/abyss.log
 
 (user@host)-$ mkdir abyss/abyss.81
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
-	abyss-pe -C abyss/abyss.81 k=81 name=abyss np=4 \
-	in="/in/trimmed/reads.trimmed.pe.1.fastq.gz /in/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.81/abyss.log
+               abyss-pe -C abyss/abyss.81 k=81 name=abyss np=4 \
+               in="/in/trimmed/reads.trimmed.pe.1.fastq.gz /in/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.81/abyss.log
 
 
 (user@host)-$ mkdir abyss/abyss.merged.81
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
-	abyss-pe -C abyss/abyss.merged.81 k=81 name=abyss np=4 \
-	in="/in/trimmed/reads.fastp.notmerged.1.fastq.gz /in/trimmed/reads.fastp.notmerged.2.fastq.gz" \
-	se="/in/trimmed/reads.fastp.merged.fastq.gz /in/trimmed/reads.trimmed.unpaired.1.fastq.gz /in/trimmed/reads.trimmed.unpaired.2.fastq.gz" default 2>&1 | tee abyss/abyss.merged.81/abyss.log
+               abyss-pe -C abyss/abyss.merged.81 k=81 name=abyss np=4 \
+               in="/in/trimmed/reads.fastp.notmerged.1.fastq.gz /in/trimmed/reads.fastp.notmerged.2.fastq.gz" \
+               se="/in/trimmed/reads.fastp.merged.fastq.gz /in/trimmed/reads.trimmed.unpaired.1.fastq.gz /in/trimmed/reads.trimmed.unpaired.2.fastq.gz" default 2>&1 | tee abyss/abyss.merged.81/abyss.log
 
 (user@host)-$ mkdir abyss/abyss.merged.51
-	docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
-	abyss-pe -C abyss/abyss.merged.51 k=51 name=abyss np=4 \
-	in="/in/trimmed/reads.fastp.notmerged.1.fastq.gz /in/trimmed/reads.fastp.notmerged.2.fastq.gz" \
-	se="/in/trimmed/reads.fastp.merged.fastq.gz /in/trimmed/reads.trimmed.unpaired.1.fastq.gz /in/trimmed/reads.trimmed.unpaired.2.fastq.gz" default 2>&1 | tee abyss/abyss.merged.51/abyss.log
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
+               abyss-pe -C abyss/abyss.merged.51 k=51 name=abyss np=4 \
+               in="/in/trimmed/reads.fastp.notmerged.1.fastq.gz /in/trimmed/reads.fastp.notmerged.2.fastq.gz" \
+               se="/in/trimmed/reads.fastp.merged.fastq.gz /in/trimmed/reads.trimmed.unpaired.1.fastq.gz /in/trimmed/reads.trimmed.unpaired.2.fastq.gz" default 2>&1 | tee abyss/abyss.merged.51/abyss.log
 
 #quast
 (user@host)-$ docker run --rm -v $(pwd):/in -u $(id -u):$(id -g) -w /in reslp/quast:5.0.2 \
@@ -86,7 +86,7 @@ done
 ***TASK 8***
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
-	spades.py -o spades-default \
+               spades.py -o spades-default \
                 -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
                 --checkpoints last \
                 -t 4 \
@@ -94,7 +94,7 @@ done
 
 #with ec
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
-	spades.py -o spades-ec-default \
+               spades.py -o spades-ec-default \
                 -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
                 --checkpoints last \
                 -t 4 \
@@ -111,14 +111,14 @@ done
 
 #run in three stages
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \ 
-	platanus assemble -o platanus/platanus \
-	-f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 -m 8 2>&1 | tee platanus/platanus.assemble.log 
+               platanus assemble -o platanus/platanus \
+               -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 -m 8 2>&1 | tee platanus/platanus.assemble.log 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \ 
-	platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \ 
-	-IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 2>&1 | tee platanus/platanus.scaffold.log 
+               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \ 
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 2>&1 | tee platanus/platanus.scaffold.log 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \ 
-	platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
-	-IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 2>&1 | tee platanus/platanus.gapclose.log 
+               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 4 2>&1 | tee platanus/platanus.gapclose.log 
  
 #quast
 (user@host)-$ docker run --rm -v $(pwd):/in -w /in reslp/quast:5.0.2 \ 
