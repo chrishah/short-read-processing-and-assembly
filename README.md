@@ -54,9 +54,9 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC):
 ```bash
 (user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
-		fastqc data/reads.1.fastq.gz
+               fastqc data/reads.1.fastq.gz
 (user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
-		fastqc data/reads.2.fastq.gz
+               fastqc data/reads.2.fastq.gz
 ```
 
 Do inspect the resulting `*.html` reports.
