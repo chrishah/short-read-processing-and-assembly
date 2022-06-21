@@ -61,6 +61,8 @@ With Docker it could be done, like so (in this case I am using an image I have m
 
 Do inspect the resulting `*.html` reports.
 
+## Read trimming
+
 Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be done like this (to keep things clean, make a directory for the trimmed reads first): 
 ```bash
 (user@host)-$ mkdir trimmed
@@ -70,7 +72,7 @@ Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be do
 		--out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
 
-If you wanted to be a bit more explicit about how you trim you could e.g. do something like this:
+If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
                 fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
@@ -79,3 +81,127 @@ If you wanted to be a bit more explicit about how you trim you could e.g. do som
                 --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
                 --thread 4 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
 ```
+
+## Read merging
+
+We noted before that under certain circumstances read pairs might overlap. The extent will depend on the particular library prep, but it may be useful to merge overlapping reads. FastP can also do that.
+
+***TASK 4***
+> Use FastP to merge trimmed read pairs (where possible) and retain the unmerged reads.
+
+There are many other tools that do read-merging. Another example is [FlasH](https://ccb.jhu.edu/software/FLASH/). 
+
+***TASK 5***
+> Try out FlasH - a docker image is prepared for you: `chrishah/flash:1.2.11`
+
+## Kmer counting
+
+We assume you've been introduced to the concept of __k-mers__, and how, before actual assembly, they can be used to get a feel for your data. Let's use a took called [kmc3](https://github.com/refresh-bio/KMC) to count the __21-mers__ in our data:
+```bash
+(user@host)-$ mkdir kmer.db.21
+(user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
+		kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t4 @fastq.files.txt kmers.21 kmer.db.21
+
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
+		kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
+```
+
+The file we have produced `kmers.21.hist.txt` is a simple text file with two columns. You could plot out the k-mer counts with e.g. `R`.
+
+A neat online tool to explore kmer frequencies is [GenomeScope](http://qb.cshl.edu/genomescope/). You can simply upload the file we've produced after a small change in formatting, specifically we want to modify the text file so that the two columns are separated by a single space only - some `awk` magic will do it:
+```bash
+(user@host)-$ cat kmers.21.hist.txt | awk '{print $1" "$2}' > kmers.21.hist.genomescope.txt
+```
+
+## De novo genome assembly
+
+Once we are satisfied with the trimmed data quality, we can now start to create longer sequences out of the short FASTQ reads. The resulting longer sequences are called contigs and the process of creating these contigs is called assembly. Sequence assembly is a complex problem and short read assembly can be computationally intense, especially when it comes to memory usage. Because there are many different kinds of assemblers for this purpose, (almost) all claiming to be better then the others but in reality each assembler has different pros and cons. A list of some commonly used assemblers is provided at the end of this chapter. At a certain stage of the assembly process most contemporary short read assemblers use a concept called De Bruijn graphs. A de Bruijn graph is a method to represent a large number of short sequences in terms of their k-mer content in the form of graph structure. k-mers are all possible sequences (read sub-sequences) of length k. The graph is constructed by aligning these k-mers so that the overlap between two k-mers is k-1 (see figure below).
+
+***QUESTION***
+> What limits the maximum k-mer size one can use in an assembly?
+
+As mentioned previously there exists a large number of genome assemblers. Our tasks will encourage you to try the following:
+ - [Minia](http://minia.genouest.org)
+ - [Spades](http://bioinf.spbau.ru/en/spades)
+ - [Platanus](http://platanus.bio.titech.ac.jp)
+ - [ABySS](https://github.com/bcgsc/abyss)
+
+They are not necessarily the best possible assemblers. It's just a selection of popular ones that tend to be very fast (Minia) and/or usually return decent results. Of course you can try any assembler you want - in fact we dare you to try an additional one. Each assembler has different qualities and problems. You will now assemble a test dataset with different assemblers, it is up to you to choose which one you want to use, but please try at least three different parameter settings and/or assemblers to see how the choice of software and parameters can influence assembly.
+
+***ATTENTION***
+> If you do this exercise as part of a course you might be asked to enter your results in an online table. 
+
+Please evaluate your assembly results with Quast - see below - and identify your ‘best’ assembly based on the Quast stats. Make sure that you remember/note the parameters used for different assemblies. In the end you’ll try to find the best assembly overall and it would be a shame if you couldn’t reproduce it.. 
+
+It may also be useful to create seperate directories in your assembly folder for each assembler / parameter setting so you know which files belong to which assembly, but this is up to you.
+
+Minia is one of the fastest assemblers around. It uses a filtering algorithm to make storing de Bruijn graphs more memory efficient. With Minia it is possible to assembly the human genome on a desktop computer within a day. 
+A typical Minia command looks like this:
+```bash
+(host)-$ minia –in reads.1.fq -in reads.2.fq –kmer-size 31 –abundance-min 3 –out minia_k31
+```
+
+The `–in` flag specifies the fastq read file from which an assembly should be made (if you have multiple files you'll need multiple `-in`. Minia accepts both plain FASTQ and gzipped FASTQ files. `–kmer-size` specifies the k-mer size. `–abundance-min` tells minia how often a k-mer must be seen in the reads to be considered correct. `–out` specifies the prefix for the output files, so if you run multiple assemblies you can still assign the output files.
+
+The above will work if Minia is installed on your server. As usual, we've made Docker container. Running Minia via Docker for a k-mer size of 41 could look like this (remember to make a `minia` directory first to keep things tidy):
+```bash
+(host)-$ mkdir minia
+
+(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
+        minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+        -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 4
+```
+
+***TASK 6***
+> Try to assemble your data a few times with Minia, with different kmer sizes; trimmed reads vs. merged reads, etc, be creative. Make sure you change the output prefix between assemblies. Try to pick informative names - this will make your life easier in the long run.
+
+__Congratulations, you have just assembled your first genomes!__ .. took me about a month to get there..
+
+Below you'll find tasks and hints for trying further assemblers, but first let's have a quick look on a neat tool for assessing contiguity of assemblies - Quast.
+
+I am assuming you've run Minia three times with different k-mers and your assembly results are the following files (adjust if you did something else):
+ - `minia/minia.41.contigs.fa`
+ - `minia/minia.51.contigs.fa`
+ - `minia/minia.61.contigs.fa`
+
+```bash
+(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+        quast -o quast_results \
+	-m 1000 --labels minia.k41,minia.k51,minia.k61 \
+        minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
+```
+
+***Note***
+> The third line in the above command is entirely optional and specifies that we want to consider only contigs of minimal length 1000 (`-m 1000`) and specify short labels for the report that will be created. Just leave out this line if you want to see what different it makes.
+
+Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the file).
+
+__Well done for reaching this point!!!!__
+
+
+Now to some other assemblers..
+
+***TASK 7***
+> Try out ABySS - Docker image: `reslp/abyss:2.2.5`
+
+***TASK 8***
+> Try out SpAdes - Docker image: `reslp/spades:3.15.3`
+
+***TASK 9***
+> Try out Platanus - Docker image: `chrishah/platanus:v1.2.4`
+
+
+Are you still feeling adventurous? Do you want to try another assembler? We can help you install or find a Docker container..
+
+Don't forget to share you results with us!!!
+
+__Thanks for joining us today!__
+
+If you have any questions, comments, feedback (good OR bad), let me know!
+
+__What do you think?__
+
+# Contact
+Christoph Hahn - <christoph.hahn@uni-graz.at>
+
