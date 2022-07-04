@@ -53,9 +53,9 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 
 With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC):
 ```bash
-(user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
+(user@host)-$ singularity exec docker://chrishah/trim_galore:0.6.0 \
                fastqc data/reads.1.fastq.gz
-(user@host)-$ docker run --rm -v $(pwd)/:/in -w /in chrishah/trim_galore:0.6.0 \
+(user@host)-$ singularity exec docker://chrishah/trim_galore:0.6.0 \
                fastqc data/reads.2.fastq.gz
 ```
 
@@ -67,14 +67,14 @@ Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be do
 ```bash
 (user@host)-$ mkdir trimmed
 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
+(user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
 
 If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
+(user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
@@ -100,10 +100,10 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 ```bash
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
+(user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
                kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t4 @fastq.files.txt kmers.21 kmer.db.21
 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
+(user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
                kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
 
@@ -148,7 +148,7 @@ The above will work if Minia is installed on your server. As usual, we've made D
 ```bash
 (host)-$ mkdir minia
 
-(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
+(host)-$ singularity exec docker://chrishah/minia:3.2.4 \
           minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 4
 ```
@@ -166,7 +166,7 @@ I am assuming you've run Minia three times with different k-mers and your assemb
  - `minia/minia.61.contigs.fa`
 
 ```bash
-(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+(host)-$ singularity exec docker://reslp/quast:5.0.2 \
           quast -o quast_results \
           -m 1000 --labels minia.k41,minia.k51,minia.k61 \
           minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
