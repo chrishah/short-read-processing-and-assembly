@@ -24,7 +24,7 @@ Move into the directory you've just downloaded:
 (user@host)-$ cd short-read-processing-and-assembly
 ```
 
-There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/master/solutions/README.md) - use them wisely ;-)
+There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/singularity/solutions/README.md) - use them wisely ;-)
 
 Now, let's get cracking!
 
