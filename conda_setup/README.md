@@ -41,12 +41,15 @@ Note, that conda allows you to explicitly install particular versions of softwar
 (user@host)-$ conda install -c bioconda spades=3.15.3
 ```
 
+Some other useful tools.
 ```bash
 (user@host)-$ conda install -c bioconda quast
 
 (user@host)-$ conda install -c bioconda minia
 
 ```
+
+__Almost there..__
 
 Software is per default installed in the so-called 'base' environment, which you have to activate as follows:
 ```bash

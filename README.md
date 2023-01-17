@@ -28,6 +28,7 @@ There are a few tasks to solve throughout the tutorial. If you get stuck we have
 
 
 __Optional__
+
 For a quick exercise in how to install software with conda please go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/master/conda_setup/README.md).
 
 Now, let's get cracking!
