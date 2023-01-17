@@ -79,7 +79,7 @@ If you wanted to be a bit more explicit about how you trim and also keep reads t
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
                --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
-               --thread 4 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
+               --thread 2 --html trimmed/trimming.report.html --json trimmed/trimming.report.json 
 ```
 
 ## Read merging
@@ -101,7 +101,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
 (user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
-               kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t4 @fastq.files.txt kmers.21 kmer.db.21
+               kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t2 @fastq.files.txt kmers.21 kmer.db.21
 
 (user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
                kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
@@ -150,7 +150,7 @@ The above will work if Minia is installed on your server. As usual, we've made D
 
 (host)-$ singularity exec docker://chrishah/minia:3.2.4 \
           minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
-          -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 4
+          -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
 
 ***TASK 6***
