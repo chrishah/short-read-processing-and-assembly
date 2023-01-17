@@ -62,6 +62,6 @@ If you want to deactivate the currently active environment, you can do this like
 ```
 
 
-__Congratulations, you have just installed software using conda!! __
+__Congratulations, you have just installed software using conda!!__
 
 
