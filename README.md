@@ -26,6 +26,10 @@ Move into the directory you've just downloaded:
 
 There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/master/solutions/README.md) - use them wisely ;-)
 
+
+__Optional__
+For a quick exercise in how to install software with conda please go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/master/conda_setup/README.md).
+
 Now, let's get cracking!
 
 ## Illumina data basics
@@ -181,6 +185,16 @@ __Well done for reaching this point!!!!__
 
 
 Now to some other assemblers..
+
+Let's try SPAdes:
+```bash
+(user@host)-$ spades.py -o spades-default \
+                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                -t 2 \
+                -m 8 --only-assembler
+```
+
+And then some more, if you have time..
 
 ***TASK 7***
 > Try out ABySS - Docker image: `reslp/abyss:2.2.5`
