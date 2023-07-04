@@ -8,7 +8,7 @@ Different sequencing instruments have specific error profiles, which are importa
 
 This tutorial is basically self contained and ships with testdata. You'll need a few pieces of software though. How to get these setup? A few options:
  - use Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3)
- - use Singularity ()
+ - use Singularity (tested with version 3.6.3)
  - install things locally (see list below)
 
 If you have either Docker or Singularity, there is no more installation needed. Running things through container engines as the above at first glance may appear a little bit more complicated, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. The below exercises assume you are using Docker, but if you have things installed locally you can always omit the lines calling Docker and call software directly instead. If you want to try things with Singularity you can switch to the branch 'singularity' on Github to see the corresponding hints (or go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/singularity), if you're unsure how to change the branch.
