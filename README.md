@@ -6,13 +6,33 @@ A short introduction to processing and assembly of short (Illumina) NGS sequenci
 The massively parallel generation of nucleotide sequence data has had an enormous effect on modern biology, and is commonly referred to as high-throughput sequencing or also Next generation sequencing (NGS). 
 Different sequencing instruments have specific error profiles, which are important to understand before getting started with analyses. The Illumina sequencing platform is currently the most widely used and a great option for genomic sequencing (among many other applications) with large amounts of data produced at relatively low cost. In the following part of the course you will explore some Illumina data and familiarize yourself with basic characteristics. Furthermore, there will be a brief introduction into quality filtering of Illumina data.
 
-There's a fair chance you already have some experience at the command line and you've done at least some pre-processing of read data before so the first few examples should be fairly straightforward and should simply help to get you back into the swing of things. The one major difference to what you're used to from previous sessions is probably that we'll be running all software as containerized tools through Docker. At first glance things may appear a little bit more complicated because of this, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. 
+This tutorial is basically self contained and ships with testdata. You'll need a few pieces of software though. How to get these setup? A few options:
+ - use Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3)
+ - use Singularity (tested with version 3.6.3)
+ - install things locally (see list below)
+
+If you have either Docker or Singularity, there is no more installation needed. Running things through container engines as the above at first glance may appear a little bit more complicated, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. The below exercises assume you are using Docker, but if you have things installed locally you can always omit the lines calling Docker and call software directly instead. If you want to try things with Singularity you can switch to the branch 'singularity' on Github to see the corresponding hints (or go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/singularity), if you're unsure how to change the branch.
 
 If you need a recap on Docker usage, we have a tutorial for this [here](https://github.com/chrishah/docker-intro/blob/master/README.md).
 
-This tutorial is basically self contained. It ships with testdata and the only things you'll need to have setup on your machine are:
- - Git
- - Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3) or Singularity
+If you don't want to use these, you'll need to install the following things on your system:
+***ATTENTION***
+> To ensure for things to work as expected we **highly** recommend to set up the specific versions of the software we note below - what might happen if you use other versions is anyones guess.. - you've been warned ;-) 
+
+Bioinformatics software:
+ - fastqc
+ - fastp (version 0.23.1)
+ - flash (version 1.2.11 - optional)
+ - kmc3 (version 3.0.0)
+ - minia (version 3.2.4)
+ - quast (version 5.0.2)
+ - spades (version 3.15.3)
+ - abyss (version 2.2.5 - optional)
+ - platanus (version 1.2.4 - optional)
+
+There's a fair chance you already have some experience at the command line and you've done at least some pre-processing of read data before so the first few examples should be fairly straightforward and should simply help to get you back into the swing of things. 
+
+Now, let's get cracking!
 
 Start by cloning this repository:
 ```bash
