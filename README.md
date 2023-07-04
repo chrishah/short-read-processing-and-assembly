@@ -51,6 +51,10 @@ __Optional__
 
 For a quick exercise in how to install software with conda please go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
 
+As backup, if you are doing this as part of a course, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'sassembly' is present you would activate it like so:
+```bash
+(user@host)-$ conda activate sassembly
+```
 
 ## Illumina data basics
 
