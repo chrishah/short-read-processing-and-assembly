@@ -64,4 +64,17 @@ If you want to deactivate the currently active environment, you can do this like
 
 __Congratulations, you have just installed software using conda!!__
 
+A very neat way of doing things with conda is to generate environments that contain certain pieces of software only.
+
+One way is to make a config file - see the file `short_assembly.config.yaml` [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/short_assembly.config.yaml).
+
+Given a file like this you can generate an environment like so:
+```bash
+(user@host)-$ conda env create -f short_assembly.config.yaml
+```
+
+To activate it use the name you specified in the config file:
+```bash
+(user@host)-$ conda activate sassembly
+```
 
