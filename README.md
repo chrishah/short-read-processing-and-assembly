@@ -46,7 +46,14 @@ Move into the directory you've just downloaded:
 
 There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/singularity/solutions/README.md) - use them wisely ;-)
 
-Now, let's get cracking!
+__Optional__
+
+For a quick exercise in how to install software with conda please go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
+
+As backup, if you are doing this as part of a course, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'sassembly' is present you would activate it like so:
+```bash
+(user@host)-$ conda activate sassembly
+```
 
 ## Illumina data basics
 
