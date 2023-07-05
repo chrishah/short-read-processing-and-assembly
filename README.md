@@ -188,11 +188,25 @@ __Congratulations, you have just assembled your first genomes!__ .. took me abou
 
 Below you'll find tasks and hints for trying further assemblers, but first let's have a quick look on a neat tool for assessing contiguity of assemblies - Quast.
 
-I am assuming you've run Minia three times with different k-mers and your assembly results are the following files (adjust if you did something else):
+```bash
+(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+          quast -o quast_results \
+          minia/minia.41.contigs.fa
+```
+
+Assuming you've run Minia three times with a number of different k-mer sizes, but following the naming convention from above you could create a joint report for all (adjust if you did something else), for example if you have:
  - `minia/minia.41.contigs.fa`
  - `minia/minia.51.contigs.fa`
  - `minia/minia.61.contigs.fa`
 
+```bash
+(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+          quast -o quast_results \
+          minia/minia.*.contigs.fa
+```
+Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the file).
+
+or, more explicitly:
 ```bash
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
           quast -o quast_results \
@@ -203,7 +217,6 @@ I am assuming you've run Minia three times with different k-mers and your assemb
 ***Note***
 > The third line in the above command is entirely optional and specifies that we want to consider only contigs of minimal length 1000 (`-m 1000`) and specify short labels for the report that will be created. Just leave out this line if you want to see what different it makes.
 
-Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the file).
 
 __Well done for reaching this point!!!!__
 
