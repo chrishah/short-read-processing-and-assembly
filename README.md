@@ -204,7 +204,7 @@ Assuming you've run Minia three times with a number of different k-mer sizes, bu
           quast -o quast_results \
           minia/minia.*.contigs.fa
 ```
-Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the file).
+Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the full directory `quast_results/` - double-clicking on quast_results/report.html will open the file in a webbrowser).
 
 or, more explicitly:
 ```bash
@@ -225,19 +225,37 @@ Now to some other assemblers..
 
 Let's try SPAdes:
 ```bash
-(user@host)-$ spades.py -o spades-default \
-                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                -t 2 \
-                -m 8 --only-assembler
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
+                spades.py -o spades-default \
+                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                   -t 2 \
+                   -m 8 --only-assembler
 ```
 
-And then some more, if you have time..
+Compare the minia and spades results with quast.
+```bash
+(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+          quast -o quast_results \
+          -m 1000 \
+          minia/minia.*.contigs.fa spades-default/scaffolds.fasta
+```
+
+Have a look at the html file `quast_results/report.html`.
+
+***ATTENTION***
+> A quast report including some more assembly variations also ships with the repository in `solutions/results/quast_results/report.html`. 
+
+
+__Well Done!!!!__
+
+
+And then some more optional tasks, if you have time..
 
 ***TASK 7***
 > Try out ABySS - Docker image: `reslp/abyss:2.2.5`
 
 ***TASK 8***
-> Try out SpAdes - Docker image: `reslp/spades:3.15.3`
+> Try out SpAdes with error correction - Docker image: `reslp/spades:3.15.3`
 
 ***TASK 9***
 > Try out Platanus - Docker image: `chrishah/platanus:v1.2.4`
