@@ -167,7 +167,7 @@ It may also be useful to create seperate directories in your assembly folder for
 Minia is one of the fastest assemblers around. It uses a filtering algorithm to make storing de Bruijn graphs more memory efficient. With Minia it is possible to assembly the human genome on a desktop computer within a day. 
 A typical Minia command looks like this:
 ```bash
-(host)-$ minia –in reads.1.fq -in reads.2.fq –kmer-size 31 –abundance-min 3 –out minia_k31
+(host-$ minia -in reads.1.fq -in reads.2.fq -kmer-size 31 -abundance-min 3 -out minia_k31
 ```
 
 The `–in` flag specifies the fastq read file from which an assembly should be made (if you have multiple files you'll need multiple `-in`. Minia accepts both plain FASTQ and gzipped FASTQ files. `–kmer-size` specifies the k-mer size. `–abundance-min` tells minia how often a k-mer must be seen in the reads to be considered correct. `–out` specifies the prefix for the output files, so if you run multiple assemblies you can still assign the output files.
