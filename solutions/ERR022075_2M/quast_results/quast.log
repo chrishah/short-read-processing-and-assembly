@@ -1,0 +1,119 @@
+/opt/conda/bin/quast -o quast_results minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa minia/minia.71.contigs.fa minia/minia.81.contigs.fa abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.61/abyss-scaffolds.fa abyss/abyss.71/abyss-scaffolds.fa spades-default/scaffolds.fasta spades-ec-default/scaffolds.fasta platanus/platanus_gapClosed.fa
+
+Version: 5.0.2
+
+System information:
+  OS: Linux-6.5.0-18-generic-x86_64-with-debian-10.0 (linux_64)
+  Python version: 2.7.16
+  CPUs number: 16
+
+Started: 2024-02-26 22:06:49
+
+Logging to /in/quast_results/quast.log
+NOTICE: Output directory already exists and looks like a QUAST output dir. Existing results can be reused (e.g. previously generated alignments)!
+NOTICE: Maximum number of threads is set to 4 (use --threads option to set it manually)
+
+CWD: /in
+Main parameters: 
+  MODE: default, threads: 4, minimum contig length: 500, minimum alignment length: 65, \
+  ambiguity: one, threshold for extensive misassembly size: 1000
+
+Contigs:
+  Pre-processing...
+  1  minia/minia.41.contigs.fa ==> minia.41.contigs
+  2  minia/minia.51.contigs.fa ==> minia.51.contigs
+  3  minia/minia.61.contigs.fa ==> minia.61.contigs
+  4  minia/minia.71.contigs.fa ==> minia.71.contigs
+  5  minia/minia.81.contigs.fa ==> minia.81.contigs
+  6  abyss/abyss.51/abyss-scaffolds.fa ==> abyss.51_abyss_scaffolds
+  7  abyss/abyss.61/abyss-scaffolds.fa ==> abyss.61_abyss_scaffolds
+  8  abyss/abyss.71/abyss-scaffolds.fa ==> abyss.71_abyss_scaffolds
+  9  spades-default/scaffolds.fasta ==> spades-default_scaffolds
+  10 spades-ec-default/scaffolds.fasta ==> spades-ec-default_scaffolds
+  11 platanus/platanus_gapClosed.fa ==> platanus_gapClosed
+
+2024-02-26 22:06:49
+Running Basic statistics processor...
+  Contig files: 
+    1  minia.41.contigs
+    2  minia.51.contigs
+    3  minia.61.contigs
+    4  minia.71.contigs
+    5  minia.81.contigs
+    6  abyss.51_abyss_scaffolds
+    7  abyss.61_abyss_scaffolds
+    8  abyss.71_abyss_scaffolds
+    9  spades-default_scaffolds
+    10 spades-ec-default_scaffolds
+    11 platanus_gapClosed
+  Calculating N50 and L50...
+    1  minia.41.contigs, N50 = 28488, L50 = 48, Total length = 4504164, GC % = 50.68, # N's per 100 kbp =  0.00
+    2  minia.51.contigs, N50 = 30995, L50 = 47, Total length = 4496680, GC % = 50.65, # N's per 100 kbp =  0.00
+    3  minia.61.contigs, N50 = 20114, L50 = 65, Total length = 4459996, GC % = 50.58, # N's per 100 kbp =  0.00
+    4  minia.71.contigs, N50 = 9861, L50 = 129, Total length = 4332234, GC % = 50.37, # N's per 100 kbp =  0.00
+    5  minia.81.contigs, N50 = 2117, L50 = 501, Total length = 3567933, GC % = 49.48, # N's per 100 kbp =  0.00
+    6  abyss.51_abyss_scaffolds, N50 = 129115, L50 = 13, Total length = 4600961, GC % = 50.71, # N's per 100 kbp =  36.60
+    7  abyss.61_abyss_scaffolds, N50 = 101160, L50 = 16, Total length = 4604405, GC % = 50.70, # N's per 100 kbp =  33.79
+    8  abyss.71_abyss_scaffolds, N50 = 95047, L50 = 17, Total length = 4597213, GC % = 50.69, # N's per 100 kbp =  67.00
+    9  spades-default_scaffolds, N50 = 130539, L50 = 14, Total length = 4554040, GC % = 50.73, # N's per 100 kbp =  14.49
+    10 spades-ec-default_scaffolds, N50 = 132618, L50 = 13, Total length = 4553282, GC % = 50.73, # N's per 100 kbp =  14.58
+    11 platanus_gapClosed, N50 = 107647, L50 = 14, Total length = 4543359, GC % = 50.68, # N's per 100 kbp =  94.25
+  Drawing Nx plot...
+    saved to /in/quast_results/basic_stats/Nx_plot.pdf
+  Drawing cumulative plot...
+    saved to /in/quast_results/basic_stats/cumulative_plot.pdf
+  Drawing GC content plot...
+    saved to /in/quast_results/basic_stats/GC_content_plot.pdf
+  Drawing minia.41.contigs GC content plot...
+    saved to /in/quast_results/basic_stats/minia.41.contigs_GC_content_plot.pdf
+  Drawing minia.51.contigs GC content plot...
+    saved to /in/quast_results/basic_stats/minia.51.contigs_GC_content_plot.pdf
+  Drawing minia.61.contigs GC content plot...
+    saved to /in/quast_results/basic_stats/minia.61.contigs_GC_content_plot.pdf
+  Drawing minia.71.contigs GC content plot...
+    saved to /in/quast_results/basic_stats/minia.71.contigs_GC_content_plot.pdf
+  Drawing minia.81.contigs GC content plot...
+    saved to /in/quast_results/basic_stats/minia.81.contigs_GC_content_plot.pdf
+  Drawing abyss.51_abyss_scaffolds GC content plot...
+    saved to /in/quast_results/basic_stats/abyss.51_abyss_scaffolds_GC_content_plot.pdf
+  Drawing abyss.61_abyss_scaffolds GC content plot...
+    saved to /in/quast_results/basic_stats/abyss.61_abyss_scaffolds_GC_content_plot.pdf
+  Drawing abyss.71_abyss_scaffolds GC content plot...
+    saved to /in/quast_results/basic_stats/abyss.71_abyss_scaffolds_GC_content_plot.pdf
+  Drawing spades-default_scaffolds GC content plot...
+    saved to /in/quast_results/basic_stats/spades-default_scaffolds_GC_content_plot.pdf
+  Drawing spades-ec-default_scaffolds GC content plot...
+    saved to /in/quast_results/basic_stats/spades-ec-default_scaffolds_GC_content_plot.pdf
+  Drawing platanus_gapClosed GC content plot...
+    saved to /in/quast_results/basic_stats/platanus_gapClosed_GC_content_plot.pdf
+  Drawing Coverage histogram (bin size: 1x)...
+    saved to /in/quast_results/basic_stats/coverage_histogram.pdf
+  Drawing spades-default_scaffolds coverage histogram (bin size: 1x)...
+    saved to /in/quast_results/basic_stats/spades-default_scaffolds_coverage_histogram.pdf
+  Drawing spades-ec-default_scaffolds coverage histogram (bin size: 1x)...
+    saved to /in/quast_results/basic_stats/spades-ec-default_scaffolds_coverage_histogram.pdf
+Done.
+
+NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
+
+2024-02-26 22:06:52
+Creating large visual summaries...
+This may take a while: press Ctrl-C to skip this step..
+  1 of 2: Creating Icarus viewers...
+  2 of 2: Creating PDF with all tables and plots...
+Done
+
+2024-02-26 22:06:53
+RESULTS:
+  Text versions of total report are saved to /in/quast_results/report.txt, report.tsv, and report.tex
+  Text versions of transposed total report are saved to /in/quast_results/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
+  HTML version (interactive tables and plots) is saved to /in/quast_results/report.html
+  PDF version (tables and plots) is saved to /in/quast_results/report.pdf
+  Icarus (contig browser) is saved to /in/quast_results/icarus.html
+  Log is saved to /in/quast_results/quast.log
+
+Finished: 2024-02-26 22:06:53
+Elapsed time: 0:00:04.298942
+NOTICEs: 3; WARNINGs: 1; non-fatal ERRORs: 0
+
+Thank you for using QUAST!
