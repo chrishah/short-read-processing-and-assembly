@@ -136,10 +136,12 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 
 The file we have produced `kmers.21.hist.txt` is a simple text file with two columns. You could plot out the k-mer counts with e.g. `R`.
 
-A neat online tool to explore kmer frequencies is [GenomeScope](http://qb.cshl.edu/genomescope/). You can simply upload the file we've produced after a small change in formatting, specifically we want to modify the text file so that the two columns are separated by a single space only - some `awk` magic will do it:
+A neat online tool to explore kmer frequencies is [GenomeScope](http://genomescope.org/). You can simply upload the file we've produced after a small change in formatting, specifically we want to modify the text file so that the two columns are separated by a single space only - some `awk` magic will do it:
 ```bash
 (user@host)-$ cat kmers.21.hist.txt | awk '{print $1" "$2}' > kmers.21.hist.genomescope.txt
 ```
+
+A screenshot of what GenomeScope would give you, e.g. for the ERR022075\_2M dataset ships with the repository - check it out [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/solutions/ERR022075_2M/ERR022075_2M_genomescope.png).
 
 ## De novo genome assembly
 
