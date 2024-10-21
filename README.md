@@ -83,7 +83,7 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 (user@host)-$ fastqc data/reads.1.fastq.gz
 ```
 
-With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC):
+With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC, or one that was made by the [biocontainers](https://biocontainers.pro/) initiative):
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in biocontainers/fastqc:v0.11.9_cv8 \
                fastqc data/reads.1.fastq.gz
