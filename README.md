@@ -48,7 +48,7 @@ There are a few tasks to solve throughout the tutorial. If you get stuck we have
 
 
 ***ATTENTION***
-> If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. Enjoy!
+> If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime maybe what you're looking for is explained [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/data/download-and-subsample.md). Enjoy!
 
 __Optional__
 
