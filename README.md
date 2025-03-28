@@ -54,7 +54,7 @@ __Optional__
 
 As backup, if you are doing this as part of a course, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'short_assembly' is present you would activate it like so:
 ```bash
-(user@host)-$ conda activate short_assembly
+(user@host)-$ conda activate sassembly
 ```
 
 For an example on how the necessary software for this exercise could be setup with conda please see [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).

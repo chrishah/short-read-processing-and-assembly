@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
+  - fastp=0.23.1
   - spades=3.15.3
   - minia=3.2.4
   - abyss=2.2.5
