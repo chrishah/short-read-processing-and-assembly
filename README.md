@@ -178,7 +178,7 @@ A typical Minia command looks like this:
 
 The `–in` flag specifies the fastq read file from which an assembly should be made (if you have multiple files you'll need multiple `-in`. Minia accepts both plain FASTQ and gzipped FASTQ files. `–kmer-size` specifies the k-mer size. `–abundance-min` tells minia how often a k-mer must be seen in the reads to be considered correct. `–out` specifies the prefix for the output files, so if you run multiple assemblies you can still assign the output files.
 
-The above will work if Minia is installed on your server. As usual, we've made Docker container. Running Minia via Docker for a k-mer size of 41 could look like this (remember to make a `minia` directory first to keep things tidy):
+The above will work if Minia is installed on your server. As usual, we've made a Docker container. Running Minia via Docker for a k-mer size of 41 could look like this (remember to make a `minia` directory first to keep things tidy):
 ```bash
 (host)-$ mkdir minia
 
@@ -221,7 +221,7 @@ or, more explicitly:
 ```
 
 ***Note***
-> The third line in the above command is entirely optional and specifies that we want to consider only contigs of minimal length 1000 (`-m 1000`) and specify short labels for the report that will be created. Just leave out this line if you want to see what different it makes.
+> The third line in the above command is entirely optional and specifies that we want to consider only contigs of minimal length 1000 (`-m 1000`) and specify short labels for the report that will be created. Just leave out this line if you want to see what difference it makes.
 
 
 __Well done for reaching this point!!!!__
