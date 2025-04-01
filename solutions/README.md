@@ -52,13 +52,6 @@ done
 
 ***TASK 7***
 ```bash
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
-               spades.py -o spades-default \
-                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                --checkpoints last \
-                -t 2 \
-                -m 8 --only-assembler
-
 #with ec
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
                spades.py -o spades-ec-default \
