@@ -260,13 +260,14 @@ __Well Done!!!!__
 And then some more optional tasks, if you have time..
 
 ***TASK 7***
-> Try out ABySS - Docker image: `reslp/abyss:2.2.5`
-
-***TASK 8***
 > Try out SpAdes with error correction - Docker image: `reslp/spades:3.15.3`
 
-***TASK 9***
+***TASK 8***
 > Try out Platanus - Docker image: `chrishah/platanus:v1.2.4`
+
+***TASK 9***
+> Try out ABySS - Docker image: `reslp/abyss:2.2.5`
+
 
 
 Are you still feeling adventurous? Do you want to try another assembler? We can help you install or find a Docker container..

@@ -52,6 +52,54 @@ done
 
 ***TASK 7***
 ```bash
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
+               spades.py -o spades-default \
+                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --checkpoints last \
+                -t 2 \
+                -m 8 --only-assembler
+
+#with ec
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
+               spades.py -o spades-ec-default \
+                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --checkpoints last \
+                -t 2 \
+                -m 8
+```
+
+***TASK 8***
+```bash
+(user@host)-$ mkdir platanus 
+
+#platanus does not accept gzipped input, so we'll first need to decompress
+(user@host)-$ gunzip trimmed/reads.trimmed.pe.1.fastq.gz  
+(user@host)-$ gunzip trimmed/reads.trimmed.pe.2.fastq.gz  
+
+#run in three stages
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus assemble -o platanus/platanus \
+               -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
+ 
+#quast
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
+               quast -o quast_results -m 1000 -t 2 \
+               --labels minia.k51,minia.k61,abyss.k51,abyss.k81,abyss.m.k51,abyss.m.k81,spades-default,spades-ec-default,platanus \
+               minia/minia.51.contigs.fa minia/minia.61.contigs.fa \
+               abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.81/abyss-scaffolds.fa \
+               abyss/abyss.merged.51/abyss-scaffolds.fa abyss/abyss.merged.81/abyss-scaffolds.fa \
+               spades-default/scaffolds.fasta spades-ec-default/scaffolds.fasta \
+               platanus/platanus_gapClosed.fa 
+```
+
+***TASK 9***
+```bash
 (user@host)-$ mkdir abyss
 
 (user@host)-$ mkdir abyss/abyss.51
@@ -81,53 +129,5 @@ done
 (user@host)-$ docker run --rm -v $(pwd):/in -u $(id -u):$(id -g) -w /in reslp/quast:5.0.2 \
         quast -o quast_results -m 1000 --labels minia.k51,minia.k61,abyss.k51,abyss.k81 -t 2 \
         minia/minia.51.contigs.fa minia/minia.61.contigs.fa abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.81/abyss-scaffolds.fa
-```
-
-***TASK 8***
-```bash
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
-               spades.py -o spades-default \
-                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                --checkpoints last \
-                -t 2 \
-                -m 8 --only-assembler
-
-#with ec
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
-               spades.py -o spades-ec-default \
-                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                --checkpoints last \
-                -t 2 \
-                -m 8
-```
-
-***TASK 9***
-```bash
-(user@host)-$ mkdir platanus 
-
-#platanus does not accept gzipped input, so we'll first need to decompress
-(user@host)-$ gunzip trimmed/reads.trimmed.pe.1.fastq.gz  
-(user@host)-$ gunzip trimmed/reads.trimmed.pe.2.fastq.gz  
-
-#run in three stages
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus assemble -o platanus/platanus \
-               -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
-               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
-               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
- 
-#quast
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-               quast -o quast_results -m 1000 -t 2 \
-               --labels minia.k51,minia.k61,abyss.k51,abyss.k81,abyss.m.k51,abyss.m.k81,spades-default,spades-ec-default,platanus \
-               minia/minia.51.contigs.fa minia/minia.61.contigs.fa \
-               abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.81/abyss-scaffolds.fa \
-               abyss/abyss.merged.51/abyss-scaffolds.fa abyss/abyss.merged.81/abyss-scaffolds.fa \
-               spades-default/scaffolds.fasta spades-ec-default/scaffolds.fasta \
-               platanus/platanus_gapClosed.fa 
 ```
 
