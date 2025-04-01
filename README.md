@@ -50,15 +50,6 @@ There are a few tasks to solve throughout the tutorial. If you get stuck we have
 ***ATTENTION***
 > If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime maybe what you're looking for is explained [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/data/download-and-subsample.md). Enjoy!
 
-__Optional__
-
-As backup, if you are doing this as part of a course, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'short_assembly' is present you would activate it like so:
-```bash
-(user@host)-$ conda activate sassembly
-```
-
-For an example on how the necessary software for this exercise could be setup with conda please see [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
-
 
 ## Illumina data basics
 
@@ -92,6 +83,14 @@ With Docker it could be done, like so (in this case I am using an image I have m
 ```
 
 Do inspect the resulting `*.html` reports.
+
+***ATTENTION (Optional)***
+> As backup, if you are doing this as part of a course and you're not fully comfortable using Docker, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'short_assembly' is present you would activate it like so:
+```bash
+(user@host)-$ conda activate sassembly
+```
+For an example on how the necessary software for this exercise could be setup with conda please see [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
+
 
 ## Read trimming
 
@@ -248,12 +247,12 @@ Compare the minia and spades results with quast.
 
 Have a look at the html file `quast_results/report.html`.
 
-***ATTENTION***
+***ATTENTION (bacterial dataset provided locally)***
+> Some assembly results and a quast report of toy bacterial dataset (2 Million reads from EBI accession: ERR022075) also ship with the repository in `solutions/ERR022075_2M/`. 
+
+***ATTENTION (standard dataset shipping with the repo)***
 > A quast report including some more assembly variations also ships with the repository in `solutions/results/quast_results/report.html`. 
 
-
-***ATTENTION***
-> Some assembly results and a quast report of toy bacterial dataset (2 Million reads from EBI accession: ERR022075) also ship with the repository in `solutions/ERR022075_2M/`. 
 
 __Well Done!!!!__
 
