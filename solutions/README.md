@@ -83,10 +83,8 @@ done
 #quast
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
                quast -o quast_results -m 1000 -t 2 \
-               --labels minia.k51,minia.k61,abyss.k51,abyss.k81,abyss.m.k51,abyss.m.k81,spades-default,spades-ec-default,platanus \
+               --labels minia.k51,minia.k61,spades-default,spades-ec-default,platanus \
                minia/minia.51.contigs.fa minia/minia.61.contigs.fa \
-               abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.81/abyss-scaffolds.fa \
-               abyss/abyss.merged.51/abyss-scaffolds.fa abyss/abyss.merged.81/abyss-scaffolds.fa \
                spades-default/scaffolds.fasta spades-ec-default/scaffolds.fasta \
                platanus/platanus_gapClosed.fa 
 ```
