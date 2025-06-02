@@ -1,7 +1,7 @@
 # short-read-processing-and-assembly
 A short introduction to processing and assembly of short (Illumina) NGS sequencing data
 
-## Introduction
+## Introduction / Preparation
 
 The massively parallel generation of nucleotide sequence data has had an enormous effect on modern biology, and is commonly referred to as high-throughput sequencing or also Next generation sequencing (NGS). 
 Different sequencing instruments have specific error profiles, which are important to understand before getting started with analyses. The Illumina sequencing platform is currently the most widely used and a great option for genomic sequencing (among many other applications) with large amounts of data produced at relatively low cost. In the following part of the course you will explore some Illumina data and familiarize yourself with basic characteristics. Furthermore, there will be a brief introduction into quality filtering of Illumina data.
@@ -85,7 +85,9 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 
 <details>
    <summary>
-   **using Singularity** (click text, if hidden)
+
+   ### using Singularity (click text, if hidden)
+
    </summary>
 
 With Singularity it could be done like so (in this case I am using an image that was made by the [biocontainers](https://biocontainers.pro/) initiative):
@@ -99,7 +101,7 @@ With Singularity it could be done like so (in this case I am using an image that
 <details>
    <summary>
 
-   ## using Docker
+   ### using Docker (click text, if hidden)
 
    </summary>
 
@@ -112,7 +114,7 @@ With Docker it could be done like so (in this case I am using an image that was 
 </details>
 
 
-Do inspect the resulting `*.html` reports which have been produced by `fastqc`. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
+Do inspect the resulting `*.html` reports which `fastqc` has produced. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
 
 
 ## Read trimming
