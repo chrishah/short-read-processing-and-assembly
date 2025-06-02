@@ -124,9 +124,10 @@ Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be do
 
 >[!TIP]
 >To keep things clean and organised let's make a directory for the trimmed reads first. 
->```bash
->(user@host)-$ mkdir trimmed
->```
+
+```bash
+(user@host)-$ mkdir trimmed
+```
 
 Now, let's run `fastp` with default settings.
 ```bash
