@@ -46,7 +46,7 @@
 do
         docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
         minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
-        -kmer-size $k -abundance-min 2 -max-memory 8000 -out minia/minia.$k -nb-cores 1
+        -kmer-size $k -abundance-min 2 -max-memory 2000 -out minia/minia.$k -nb-cores 1
 done
 ```
 
