@@ -86,7 +86,7 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 <details>
    <summary>
 
-   ## using Singularity
+   **using Singularity** (click text, if hidden)
 
    </summary>
 
