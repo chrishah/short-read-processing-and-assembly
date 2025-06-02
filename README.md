@@ -120,19 +120,66 @@ With Docker it could be done like so (in this case I am using an image that was 
 
 ## Read trimming
 
-Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be done like this (to keep things clean, make a directory for the trimmed reads first): 
+Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be done like this.
+
+>[!TIP]
+>To keep things clean and organised let's make a directory for the trimmed reads first. 
+>```bash
+>(user@host)-$ mkdir trimmed
+>```
+
+Now, let's run `fastp` with default settings.
 ```bash
-(user@host)-$ mkdir trimmed
+(user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+               --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
+```
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+```bash
+
+(user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
+               fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+               --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
+```
+</details>
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+```bash
 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
+</details>
+
+Inspect the files that were generated:
+```bash
+(user@host)-$ ls -hrlt trimmed/
+```
+
+Fastp produces it's own html report. Do inspect it.
+
+To have a direct comparison we recommend to also run fastqc on the trimmed reads.
+```bash
+(user@host)-$ fastqc trimmed/reads.trimmed.pe.1.fastq.gz
+```
+
+>[!ATTENTION]
+>Which effect did the trimming have on our data?
+
+Fastp has a large number of options and parameters to be changed. 
 
 If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
-               fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+(user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
                --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \
