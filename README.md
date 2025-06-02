@@ -83,6 +83,9 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 (user@host)-$ fastqc data/reads.1.fastq.gz
 ```
 
+Do inspect the resulting `*.html` reports which `fastqc` has produced. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
+
+
 <details>
    <summary>
 
@@ -97,7 +100,6 @@ With Singularity it could be done like so (in this case I am using an image that
 ```
 
 </details>
-
 <details>
    <summary>
 
@@ -113,8 +115,7 @@ With Docker it could be done like so (in this case I am using an image that was 
 
 </details>
 
-
-Do inspect the resulting `*.html` reports which `fastqc` has produced. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
+***Well Done!***
 
 
 ## Read trimming
