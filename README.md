@@ -133,6 +133,7 @@ Now, let's run `fastp` with default settings.
 (user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
+
 <details>
    <summary>
 
@@ -140,7 +141,6 @@ Now, let's run `fastp` with default settings.
 
    </summary>
 ```bash
-
 (user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
@@ -149,7 +149,7 @@ Now, let's run `fastp` with default settings.
 <details>
    <summary>
 
-   ### using Singularity (click text, if hidden)
+   ### using Docker (click text, if hidden)
 
    </summary>
 ```bash
@@ -281,19 +281,48 @@ It may also be useful to create seperate directories in your assembly folder for
 Minia is one of the fastest assemblers around. It uses a filtering algorithm to make storing de Bruijn graphs more memory efficient. With Minia it is possible to assembly the human genome on a desktop computer within a day. 
 A typical Minia command looks like this:
 ```bash
-(host-$ minia -in reads.1.fq -in reads.2.fq -kmer-size 31 -abundance-min 3 -out minia_k31
+(user@host)-$ minia -in reads.1.fq -in reads.2.fq -kmer-size 31 -abundance-min 3 -out minia_k31
 ```
 
 The `–in` flag specifies the fastq read file from which an assembly should be made (if you have multiple files you'll need multiple `-in`. Minia accepts both plain FASTQ and gzipped FASTQ files. `–kmer-size` specifies the k-mer size. `–abundance-min` tells minia how often a k-mer must be seen in the reads to be considered correct. `–out` specifies the prefix for the output files, so if you run multiple assemblies you can still assign the output files.
 
-The above will work if Minia is installed on your server. As usual, we've made a Docker container. Running Minia via Docker for a k-mer size of 41 could look like this (remember to make a `minia` directory first to keep things tidy):
+
+>[!CAUTION]
+>Make sure to keep things organised by making a target directory first.
+
 ```bash
 (host)-$ mkdir minia
+```
+Then adust the example command above to use the correct input files and write the output to the directory you have created previously. This should work if Minia is installed on your server. 
+```bash
+(host)-$ minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+          -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
+```
 
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+```bash
+(host)-$ singularity exec docker://chrishah/minia:3.2.4 \
+          minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+          -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
+```
+</details>
+<details>
+   <summary>
+
+   ### using Docker (click text, if hidden)
+
+   </summary>
+```bash
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
           minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
+</details>
 
 ***TASK 6***
 > Try to assemble your data a few times with Minia, with different kmer sizes; trimmed reads vs. merged reads, etc, be creative. Make sure you change the output prefix between assemblies. Try to pick informative names - this will make your life easier in the long run.
