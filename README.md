@@ -85,9 +85,7 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 
 <details>
    <summary>
-
-   **using Singularity** (click text, if hidden)
-
+   __using Singularity__ (click text, if hidden)
    </summary>
 
 With Singularity it could be done like so (in this case I am using an image that was made by the [biocontainers](https://biocontainers.pro/) initiative):
