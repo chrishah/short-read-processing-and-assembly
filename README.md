@@ -460,11 +460,13 @@ Let's try SPAdes (minimum command example):
 
 Have a look at the html file `quast_results/report.html`.
 
-***ATTENTION (bacterial dataset provided locally)***
-> Some assembly results and a quast report of toy bacterial dataset (2 Million reads from EBI accession: ERR022075) also ship with the repository in `solutions/ERR022075_2M/`. 
+>[!TIP]
+>Bacterial dataset provided locally
+>Some assembly results and a quast report of toy bacterial dataset (2 Million reads from EBI accession: ERR022075) also ship with the repository in `solutions/ERR022075_2M/`. 
 
-***ATTENTION (standard dataset shipping with the repo)***
-> A quast report including some more assembly variations also ships with the repository in `solutions/results/quast_results/report.html`. 
+>[!TIP]
+>Standard dataset shipping with the repo
+>A quast report including some more assembly variations also ships with the repository in `solutions/results/quast_results/report.html`. 
 
 
 __Well Done!!!!__
