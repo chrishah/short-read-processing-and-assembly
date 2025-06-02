@@ -56,7 +56,7 @@ Move into the directory you've just downloaded:
 There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/solutions/README.md) - use them wisely ;-)
 
 
->[!ATTENTION]
+>[!CAUTION]
 >If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime, if you're not content with the very small dataset shipping with the repository, instructions on how to obtain a bacterial (_E. coli_) dataset we often use in the course from a public database can be found [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/data/download-and-subsample.md). Enjoy!
 
 
@@ -172,7 +172,7 @@ To have a direct comparison we recommend to also run fastqc on the trimmed reads
 (user@host)-$ fastqc trimmed/reads.trimmed.pe.1.fastq.gz
 ```
 
->[!ATTENTION]
+>[!IMPORTANT]
 >Which effect did the trimming have on our data?
 
 Fastp has a large number of options and parameters to be changed. 
