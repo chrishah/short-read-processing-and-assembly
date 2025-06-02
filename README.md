@@ -410,8 +410,7 @@ Now to some other assemblers..
 
 Let's try SPAdes (minimum command example):
 ```bash
-(user@host)-$ singularity exec docker://reslp/spades:3.15.3 \
-                spades.py -o spades-default \
+(user@host)-$ spades.py -o spades-default \
                    -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
                    -t 2 \
                    -m 8 --only-assembler
