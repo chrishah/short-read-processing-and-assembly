@@ -339,17 +339,12 @@ __Congratulations, you have just assembled your first genomes!__ .. took me abou
 
 </details>
 
-***TASK 6***
-> Try to assemble your data a few times with Minia, with different kmer sizes; trimmed reads vs. merged reads, etc, be creative. Make sure you change the output prefix between assemblies. Try to pick informative names - this will make your life easier in the long run.
-
-
 Below you'll find tasks and hints for trying further assemblers, but first let's have a quick look on a neat tool for assessing contiguity of assemblies - Quast.
 
 ```bash
 (host)-$ quast -o quast_results \
           minia/minia.41.contigs.fa
 ```
-
 <details>
    <summary>
 
@@ -378,6 +373,12 @@ Below you'll find tasks and hints for trying further assemblers, but first let's
 ```
 
 </details>
+
+When run as above `quast` will produce a directory called `quast_results` that contains a html report. If you're working on a remote server make sure to download the entire `quast_results` directory.
+
+
+***TASK 6***
+> Try to assemble your data a few times with Minia, with different kmer sizes; trimmed reads vs. merged reads, etc, be creative. Make sure you change the output prefix between assemblies. Try to pick informative names - this will make your life easier in the long run.
 
 
 Assuming you've run Minia three times with a number of different k-mer sizes, but following the naming convention from above you could create a joint report for all (adjust if you did something else), for example if you have:
