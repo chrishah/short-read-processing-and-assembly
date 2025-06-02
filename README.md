@@ -6,18 +6,7 @@ A short introduction to processing and assembly of short (Illumina) NGS sequenci
 The massively parallel generation of nucleotide sequence data has had an enormous effect on modern biology, and is commonly referred to as high-throughput sequencing or also Next generation sequencing (NGS). 
 Different sequencing instruments have specific error profiles, which are important to understand before getting started with analyses. The Illumina sequencing platform is currently the most widely used and a great option for genomic sequencing (among many other applications) with large amounts of data produced at relatively low cost. In the following part of the course you will explore some Illumina data and familiarize yourself with basic characteristics. Furthermore, there will be a brief introduction into quality filtering of Illumina data.
 
-This tutorial is basically self contained and ships with testdata. You'll need a few pieces of software though. How to get these setup? A few options:
- - use Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3)
- - use Singularity (tested with version 3.6.3)
- - install things locally (see list below)
-
-If you have either Docker or Singularity, there is no more installation needed. Running things through container engines as the above at first glance may appear a little bit more complicated, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. The below exercises assume you are using Docker, but if you have things installed locally you can always omit the lines calling Docker and call software directly instead. If you want to try things with Singularity you can switch to the branch 'singularity' on Github to see the corresponding hints (or go [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/singularity), if you're unsure how to change the branch.
-
-If you need a recap on Docker usage, we have a tutorial for this [here](https://github.com/chrishah/docker-intro/blob/master/README.md).
-
-If you don't want to use these, you'll need to install the following things on your system:
-***ATTENTION***
-> To ensure for things to work as expected we **highly** recommend to set up the specific versions of the software we note below - what might happen if you use other versions is anyones guess.. - you've been warned ;-) 
+This tutorial is basically self contained and ships with testdata. You'll need a few pieces of software though. 
 
 Bioinformatics software:
  - fastqc
@@ -30,9 +19,29 @@ Bioinformatics software:
  - abyss (version 2.2.5 - optional)
  - platanus (version 1.2.4 - optional)
 
-There's a fair chance you already have some experience at the command line and you've done at least some pre-processing of read data before so the first few examples should be fairly straightforward and should simply help to get you back into the swing of things. 
+>[!CAUTION]
+>To ensure for things to work as expected we **highly** recommend to set up the specific versions of the software we note above - what might happen if you use other versions is anyones guess.. - you've been warned ;-)
 
-Now, let's get cracking!
+How to get these software setup? A few options:
+ - install things locally, e.g. via conda
+ - use Docker (tested with version 20.10.7, build 20.10.7-0ubuntu5~18.04.3)
+ - use Singularity (tested with version 3.6.3)
+
+If you are doing this as part of a course and you're not fully comfortable using Docker, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'short_assembly' is present you would activate it like so:
+```bash
+(user@host)-$ conda activate short_assembly
+```
+For an example on how the necessary software for this exercise could be setup with conda please see [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
+
+If you have either Docker or Singularity, there is no more installation needed. Running things through such container engines at first glance may appear a little bit more complicated, but it has the big advantage that you don't need to have any of the software that we'll be using actually installed locally on your computer/server and secondly, this ensures full reproducibility of this session. If you need a recap on Docker usage, we have a tutorial for this [here](https://github.com/chrishah/docker-intro/blob/master/README.md).
+
+>[!TIP]
+>For the majority of the exercises below we provide example commands that assume local installation but also alternatives using Docker and/or Singularity. If you are doing this session as part of a course wait for recommendations from the instructors about which version to use.
+
+
+Now, let's get cracking ;-)!
+
+There's a fair chance you already have some experience at the command line and you've done at least some pre-processing of read data before so the first few examples should be fairly straightforward and should simply help to get you back into the swing of things. 
 
 Start by cloning this repository:
 ```bash
@@ -47,8 +56,8 @@ Move into the directory you've just downloaded:
 There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/solutions/README.md) - use them wisely ;-)
 
 
-***ATTENTION***
-> If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime maybe what you're looking for is explained [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/data/download-and-subsample.md). Enjoy!
+>[!ATTENTION]
+>If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime, if you're not content with the very small dataset shipping with the repository, instructions on how to obtain a bacterial (_E. coli_) dataset we often use in the course from a public database can be found [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/data/download-and-subsample.md). Enjoy!
 
 
 ## Illumina data basics
@@ -74,22 +83,38 @@ Now, let's have a quick look at the data quality in our files. You've probably s
 (user@host)-$ fastqc data/reads.1.fastq.gz
 ```
 
-With Docker it could be done, like so (in this case I am using an image I have made for [trim_galore](https://www.bioinformatics.babraham.ac.uk/projects/trim_galore/), which uses FastQC, or one that was made by the [biocontainers](https://biocontainers.pro/) initiative):
+<details>
+   <summary>
+
+   ## using Singularity
+
+   </summary>
+
+With Singularity it could be done like so (in this case I am using an image that was made by the [biocontainers](https://biocontainers.pro/) initiative):
+```bash
+(user@host)-$ singularity exec docker://biocontainers/fastqc:v0.11.9_cv8 \
+               fastqc data/reads.1.fastq.gz
+```
+
+</details>
+
+<details>
+   <summary>
+
+   ## using Docker
+
+   </summary>
+
+With Docker it could be done like so (in this case I am using an image that was made by the [biocontainers](https://biocontainers.pro/) initiative):
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in biocontainers/fastqc:v0.11.9_cv8 \
                fastqc data/reads.1.fastq.gz
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in biocontainers/fastqc:v0.11.9_cv8 \
-               fastqc data/reads.2.fastq.gz
 ```
 
-Do inspect the resulting `*.html` reports.
+</details>
 
-***ATTENTION (Optional)***
-> As backup, if you are doing this as part of a course and you're not fully comfortable using Docker, your instructors may have set up a conda environment with software installed for you. Please consult your instructors if you are interested. Assuming an environment with the name 'short_assembly' is present you would activate it like so:
-```bash
-(user@host)-$ conda activate sassembly
-```
-For an example on how the necessary software for this exercise could be setup with conda please see [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/conda_setup/README.md).
+
+Do inspect the resulting `*.html` reports which have been produced by `fastqc`. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
 
 
 ## Read trimming
