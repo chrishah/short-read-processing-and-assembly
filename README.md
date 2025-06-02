@@ -308,6 +308,8 @@ Then adust the example command above to use the correct input files and write th
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
 
+__Congratulations, you have just assembled your first genomes!__ .. took me about a month to get there..
+
 <details>
    <summary>
 
@@ -340,9 +342,34 @@ Then adust the example command above to use the correct input files and write th
 ***TASK 6***
 > Try to assemble your data a few times with Minia, with different kmer sizes; trimmed reads vs. merged reads, etc, be creative. Make sure you change the output prefix between assemblies. Try to pick informative names - this will make your life easier in the long run.
 
-__Congratulations, you have just assembled your first genomes!__ .. took me about a month to get there..
 
 Below you'll find tasks and hints for trying further assemblers, but first let's have a quick look on a neat tool for assessing contiguity of assemblies - Quast.
+
+```bash
+(host)-$ quast -o quast_results \
+          minia/minia.41.contigs.fa
+```
+
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+
+```bash
+(host)-$ singularity exec docker://reslp/quast:5.0.2 \
+          quast -o quast_results \
+          minia/minia.41.contigs.fa
+```
+
+</details>
+<details>
+   <summary>
+
+   ### using Docker (click text, if hidden)
+
+   </summary>
 
 ```bash
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
@@ -350,22 +377,23 @@ Below you'll find tasks and hints for trying further assemblers, but first let's
           minia/minia.41.contigs.fa
 ```
 
+</details>
+
+
 Assuming you've run Minia three times with a number of different k-mer sizes, but following the naming convention from above you could create a joint report for all (adjust if you did something else), for example if you have:
  - `minia/minia.41.contigs.fa`
  - `minia/minia.51.contigs.fa`
  - `minia/minia.61.contigs.fa`
 
 ```bash
-(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-          quast -o quast_results \
+(host)-$ quast -o quast_results \
           minia/minia.*.contigs.fa
 ```
 Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the full directory `quast_results/` - double-clicking on quast_results/report.html will open the file in a webbrowser).
 
 or, more explicitly:
 ```bash
-(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-          quast -o quast_results \
+(host)-$ quast -o quast_results \
           -m 1000 --labels minia.k41,minia.k51,minia.k61 \
           minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
 ```
@@ -379,7 +407,38 @@ __Well done for reaching this point!!!!__
 
 Now to some other assemblers..
 
-Let's try SPAdes:
+Let's try SPAdes (minimum command example):
+```bash
+(user@host)-$ singularity exec docker://reslp/spades:3.15.3 \
+                spades.py -o spades-default \
+                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                   -t 2 \
+                   -m 8 --only-assembler
+```
+
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+
+```bash
+(user@host)-$ singularity exec docker://reslp/spades:3.15.3 \
+                spades.py -o spades-default \
+                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                   -t 2 \
+                   -m 8 --only-assembler
+```
+
+</details>
+<details>
+   <summary>
+
+   ### using Docker (click text, if hidden)
+
+   </summary>
+
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
                 spades.py -o spades-default \
@@ -388,10 +447,13 @@ Let's try SPAdes:
                    -m 8 --only-assembler
 ```
 
-Compare the minia and spades results with quast.
+</details>
+
+>[!IMPORTANT]
+>Compare the minia and spades results with quast.
+
 ```bash
-(host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-          quast -o quast_results \
+(host)-$ quast -o quast_results \
           -m 1000 \
           minia/minia.*.contigs.fa spades-default/scaffolds.fasta
 ```
@@ -431,6 +493,6 @@ If you have any questions, comments, feedback (good OR bad), let me know!
 
 __What do you think?__
 
-# Contact
+## Contact
 Christoph Hahn - <christoph.hahn@uni-graz.at>
 
