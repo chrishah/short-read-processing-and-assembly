@@ -141,11 +141,13 @@ Now, let's run `fastp` with default settings.
    ### using Singularity (click text, if hidden)
 
    </summary>
+
 ```bash
 (user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
+
 </details>
 <details>
    <summary>
@@ -153,12 +155,14 @@ Now, let's run `fastp` with default settings.
    ### using Docker (click text, if hidden)
 
    </summary>
+
 ```bash
 
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
                fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
+
 </details>
 
 Inspect the files that were generated:
@@ -219,6 +223,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
    ### using Singularity (click text, if hidden)
 
    </summary>
+
 ```bash
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
@@ -228,6 +233,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 (user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
                kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
+
 </details>
 <details>
    <summary>
@@ -235,6 +241,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
    ### using Docker (click text, if hidden)
 
    </summary>
+
 ```bash
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
@@ -244,6 +251,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
                kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
+
 </details>
 
 The file we have produced `kmers.21.hist.txt` is a simple text file with two columns. You could plot out the k-mer counts with e.g. `R`.
@@ -306,11 +314,13 @@ Then adust the example command above to use the correct input files and write th
    ### using Singularity (click text, if hidden)
 
    </summary>
+
 ```bash
 (host)-$ singularity exec docker://chrishah/minia:3.2.4 \
           minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
+
 </details>
 <details>
    <summary>
@@ -318,11 +328,13 @@ Then adust the example command above to use the correct input files and write th
    ### using Docker (click text, if hidden)
 
    </summary>
+
 ```bash
 (host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/minia:3.2.4 \
           minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
+
 </details>
 
 ***TASK 6***
