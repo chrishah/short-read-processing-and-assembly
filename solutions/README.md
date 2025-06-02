@@ -69,7 +69,7 @@ done
 (user@host)-$ gunzip trimmed/reads.trimmed.pe.1.fastq.gz  
 (user@host)-$ gunzip trimmed/reads.trimmed.pe.2.fastq.gz  
 
-#run in three stages
+#run in three stages (when installed locally)
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
                platanus assemble -o platanus/platanus \
                -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
@@ -79,6 +79,28 @@ done
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
                platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
                -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
+
+#run in three stages (via docker)
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus assemble -o platanus/platanus \
+               -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
+(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
+               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
+               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
+
+#run in three stages (via singularity)
+(user@host)-$ singularity exec docker://chrishah/platanus:v1.2.4 \
+               platanus assemble -o platanus/platanus \
+               -f trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
+(user@host)-$ singularity exec docker://chrishah/platanus:v1.2.4 \
+               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
+               -IP1 trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
+(user@host)-$ singularity exec docker://chrishah/platanus:v1.2.4 \
+               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
+               -IP1 trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
  
 #quast
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
@@ -94,9 +116,17 @@ done
 (user@host)-$ mkdir abyss
 
 (user@host)-$ mkdir abyss/abyss.51
+#locally
+(user@host)-$ abyss-pe -C abyss/abyss.51 k=51 name=abyss np=2 \
+               in="$(pwd)/trimmed/reads.trimmed.pe.1.fastq.gz $(pwd)/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.51/abyss.log
+#using Docker
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
                abyss-pe -C abyss/abyss.51 k=51 name=abyss np=2 \
                in="/in/trimmed/reads.trimmed.pe.1.fastq.gz /in/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.51/abyss.log
+#using Singularity
+(user@host)-$ singularity exec docker://reslp/abyss:2.2.5 \
+               abyss-pe -C abyss/abyss.51 k=51 name=abyss np=2 \
+               in="$(pwd)/trimmed/reads.trimmed.pe.1.fastq.gz $(pwd)/trimmed/reads.trimmed.pe.2.fastq.gz" default 2>&1 | tee abyss/abyss.51/abyss.log
 
 (user@host)-$ mkdir abyss/abyss.81
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/abyss:2.2.5 \
