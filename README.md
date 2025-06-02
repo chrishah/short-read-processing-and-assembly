@@ -175,7 +175,10 @@ To have a direct comparison we recommend to also run fastqc on the trimmed reads
 >[!IMPORTANT]
 >Which effect did the trimming have on our data?
 
-Fastp has a large number of options and parameters to be changed. 
+Fastp has a large number of options and parameters to be changed. See all it has to offer by displaying the help.
+```bash
+(user@host)-$ fastp -help
+``` 
 
 If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
@@ -200,7 +203,37 @@ There are many other tools that do read-merging. Another example is [FlasH](http
 
 ## Kmer counting
 
-We assume you've been introduced to the concept of __k-mers__, and how, before actual assembly, they can be used to get a feel for your data. Let's use a took called [kmc3](https://github.com/refresh-bio/KMC) to count the __21-mers__ in our data:
+We assume you've been introduced to the concept of __k-mers__, and how, before actual assembly, they can be used to get a feel for your data. Let's use a tool called [kmc3](https://github.com/refresh-bio/KMC) to count the __21-mers__ in our data:
+
+```bash
+(user@host)-$ mkdir kmer.db.21
+(user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
+(user@host)-$ kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t2 @fastq.files.txt kmers.21 kmer.db.21
+
+(user@host)-$ kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
+```
+<details>
+   <summary>
+
+   ### using Singularity (click text, if hidden)
+
+   </summary>
+```bash
+(user@host)-$ mkdir kmer.db.21
+(user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
+(user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
+               kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t2 @fastq.files.txt kmers.21 kmer.db.21
+
+(user@host)-$ singularity exec docker://chrishah/kmc3-docker:v3.0 \
+               kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
+```
+</details>
+<details>
+   <summary>
+
+   ### using Docker (click text, if hidden)
+
+   </summary>
 ```bash
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
@@ -210,15 +243,18 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/kmc3-docker:v3.0 \
                kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
+</details>
 
 The file we have produced `kmers.21.hist.txt` is a simple text file with two columns. You could plot out the k-mer counts with e.g. `R`.
 
-A neat online tool to explore kmer frequencies is [GenomeScope](http://genomescope.org/). You can simply upload the file we've produced after a small change in formatting, specifically we want to modify the text file so that the two columns are separated by a single space only - some `awk` magic will do it:
+A neat online tool to explore kmer frequencies is [GenomeScope](http://genomescope.org/). You can upload the file we've produced after a small change in formatting, specifically we want to modify the text file so that the two columns are separated by a single space only - some `awk` magic will do it:
 ```bash
 (user@host)-$ cat kmers.21.hist.txt | awk '{print $1" "$2}' > kmers.21.hist.genomescope.txt
 ```
 
-A screenshot of what GenomeScope would give you, e.g. for the ERR022075\_2M dataset ships with the repository - check it out [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/solutions/ERR022075_2M/ERR022075_2M_genomescope.png).
+A screenshot of what GenomeScope would give you, e.g. for the ERR022075\_2M dataset is displayed below. It ships with the repository - check it out also [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/solutions/ERR022075_2M/ERR022075_2M_genomescope.png).
+
+![](solutions/ERR022075_2M/ERR022075_2M_genomescope.png)
 
 ## De novo genome assembly
 
