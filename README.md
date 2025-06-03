@@ -1,6 +1,8 @@
 # short-read-processing-and-assembly
 A short introduction to processing and assembly of short (Illumina) NGS sequencing data
 
+Github URL: [https://github.com/chrishah/short-read-processing-and-assembly](https://github.com/chrishah/short-read-processing-and-assembly)
+
 ## Introduction / Preparation
 
 The massively parallel generation of nucleotide sequence data has had an enormous effect on modern biology, and is commonly referred to as high-throughput sequencing or also Next generation sequencing (NGS). 
@@ -100,6 +102,7 @@ With Singularity it could be done like so (in this case I am using an image that
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -149,6 +152,7 @@ Now, let's run `fastp` with default settings.
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -217,6 +221,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 
 (user@host)-$ kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
+
 <details>
    <summary>
 
@@ -235,6 +240,7 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -324,6 +330,7 @@ __Congratulations, you have just assembled your first genomes!__ .. took me abou
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -345,6 +352,7 @@ Below you'll find tasks and hints for trying further assemblers, but first let's
 (host)-$ quast -o quast_results \
           minia/minia.41.contigs.fa
 ```
+
 <details>
    <summary>
 
@@ -359,6 +367,7 @@ Below you'll find tasks and hints for trying further assemblers, but first let's
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -375,6 +384,23 @@ Below you'll find tasks and hints for trying further assemblers, but first let's
 </details>
 
 When run as above `quast` will produce a directory called `quast_results` that contains a html report. If you're working on a remote server make sure to download the entire `quast_results` directory.
+
+
+As another measure of assembly quality one could assess the completeness of gene space e.g. with BUSCO.
+
+<details>
+   <summary>
+
+   ### BUSCO example (click text, if hidden)
+
+   </summary>
+
+A minimum BUSCO command assuming it is installed on your system. Adjust input file (`-i`), output prefix (`-o`) and the `--lineage_dataset` paraemeter to your needs. Get a list of all available lineage datasets by running `busco --list-datasets`.
+```bash
+(host)-$ busco -i assembly.fasta -o output_prefix -m genome --lineage_dataset gammaproteobacteria_odb10
+```
+
+</details>
 
 
 ***TASK 6***
@@ -411,9 +437,9 @@ Now to some other assemblers..
 Let's try SPAdes (minimum command example):
 ```bash
 (user@host)-$ spades.py -o spades-default \
-                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                   -t 2 \
-                   -m 8 --only-assembler
+               -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+               -t 2 \
+               -m 8 --only-assembler
 ```
 
 <details>
@@ -426,12 +452,13 @@ Let's try SPAdes (minimum command example):
 ```bash
 (user@host)-$ singularity exec docker://reslp/spades:3.15.3 \
                 spades.py -o spades-default \
-                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                   -t 2 \
-                   -m 8 --only-assembler
+                 -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                 -t 2 \
+                 -m 8 --only-assembler
 ```
 
 </details>
+
 <details>
    <summary>
 
@@ -442,9 +469,9 @@ Let's try SPAdes (minimum command example):
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \
                 spades.py -o spades-default \
-                   -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
-                   -t 2 \
-                   -m 8 --only-assembler
+                 -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                 -t 2 \
+                 -m 8 --only-assembler
 ```
 
 </details>
