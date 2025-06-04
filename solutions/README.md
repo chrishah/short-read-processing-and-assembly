@@ -70,15 +70,12 @@ done
 (user@host)-$ gunzip trimmed/reads.trimmed.pe.2.fastq.gz  
 
 #run in three stages (when installed locally)
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus assemble -o platanus/platanus \
-               -f /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
-               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
-(user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
-               platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
-               -IP1 /in/trimmed/reads.trimmed.pe.1.fastq /in/trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
+(user@host)-$ platanus assemble -o platanus/platanus \
+               -f trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 -m 8 2>&1 | tee platanus/platanus.assemble.log 
+(user@host)-$ platanus scaffold -o platanus/platanus -c platanus/platanus_contig.fa -b platanus/platanus_contigBubble.fa \
+               -IP1 trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.scaffold.log 
+(user@host)-$ platanus gap_close -o platanus/platanus -c platanus/platanus_scaffold.fa \
+               -IP1 trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
 
 #run in three stages (via docker)
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in chrishah/platanus:v1.2.4 \
