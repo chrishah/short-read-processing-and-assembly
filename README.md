@@ -55,12 +55,23 @@ Move into the directory you've just downloaded:
 (user@host)-$ cd short-read-processing-and-assembly
 ```
 
+The repository ships with testdata, which you can find in the `data/` directory.
+
+```bash
+(user@host)-$ ls data/
+```
+
 There are a few tasks to solve throughout the tutorial. If you get stuck we have solutions prepared for you [here](https://github.com/chrishah/short-read-processing-and-assembly/tree/main/solutions/README.md) - use them wisely ;-)
 
 
 >[!CAUTION]
 >If you are doing this exercise as part of a course you may be given separate test data. Please halt here and ask your instructors about this if you haven't received any information at this point. In the meantime, if you're not content with the very small dataset shipping with the repository, instructions on how to obtain a bacterial (_E. coli_) dataset we often use in the course from a public database can be found [here](https://github.com/chrishah/short-read-processing-and-assembly/blob/main/data/download-and-subsample.md). Enjoy!
 
+If the _E. coli_ testdata is provided to you, you can copy it at this stage using a command like this (may have to be adjusted depending on the course setting):
+```bash
+(user@host)-$ cp ~/Share/Day2/ERR022075_2M_1.fastq.gz data/reads.1.fastq.gz
+(user@host)-$ cp ~/Share/Day2/ERR022075_2M_2.fastq.gz data/reads.2.fastq.gz
+```
 
 ## Illumina data basics
 
