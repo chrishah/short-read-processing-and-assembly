@@ -9,12 +9,12 @@ First, find an appropriate version of miniconda on the the miniconda [webpage](h
 To ensure that we'll all get the same version we'll download a particular installation file. Let's also make sure that we're all in our home directory first.
 ```bash
 (user@host)-$ cd ~
-(user@host)-$ wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.12.0-Linux-x86_64.sh
+(user@host)-$ wget https://repo.anaconda.com/miniconda/Miniconda3-py39_25.1.1-2-Linux-x86_64.sh
 ```
 
 Now, install miniconda, by executing the installation script that you've just downloaded.
 ```bash
-(user@host)-$ bash ./Miniconda3-py38_4.12.0-Linux-x86_64.sh
+(user@host)-$ bash ./Miniconda3-py39_25.1.1-2-Linux-x86_64.sh
 ```
 
 You will have to confirm with ENTER and 'yes' a few times. Let's keep if simple for now.
