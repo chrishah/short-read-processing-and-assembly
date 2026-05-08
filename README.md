@@ -218,7 +218,7 @@ We noted before that under certain circumstances read pairs might overlap. The e
 
 There are many other tools that do read-merging. Another example is [FlasH](https://ccb.jhu.edu/software/FLASH/). 
 
-***TASK 5***
+***TASK 5 (OPTIONAL)***
 > Try out FlasH - `flash` should be available in your conda enviroment, or use the following docker image `chrishah/flash:1.2.11`
 
 ## Kmer counting
@@ -228,9 +228,10 @@ We assume you've been introduced to the concept of __k-mers__, and how, before a
 ```bash
 (user@host)-$ mkdir kmer.db.21
 (user@host)-$ ls -1 data/reads.*.fastq.gz > fastq.files.txt
-(user@host)-$ kmc -k21 -m4 -v -sm -ci2 -cx1000000000 -cs255 -n64 -t2 @fastq.files.txt kmers.21 kmer.db.21
+(short_assembly) (user@host)-$ kmc -k21 -m4 -v -sm -ci2 -cx1000000000 \
+                  -cs255 -n64 -t2 @fastq.files.txt kmers.21 kmer.db.21
 
-(user@host)-$ kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
+(short_assembly) (user@host)-$ kmc_tools histogram kmers.21 -ci2 kmers.21.hist.txt
 ```
 
 <details>
@@ -321,7 +322,7 @@ The `–in` flag specifies the fastq read file from which an assembly should be 
 ```
 Then adust the example command above to use the correct input files and write the output to the directory you have created previously. This should work if Minia is installed on your server. 
 ```bash
-(host)-$ minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+(short_assembly) (host)-$ minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
 
@@ -360,7 +361,7 @@ __Congratulations, you have just assembled your first genomes!__ .. took me abou
 Below you'll find tasks and hints for trying further assemblers, but first let's have a quick look on a neat tool for assessing contiguity of assemblies - Quast.
 
 ```bash
-(host)-$ quast -o quast_results \
+(short_assembly) (host)-$ quast -o quast_results \
           minia/minia.41.contigs.fa
 ```
 
@@ -408,7 +409,7 @@ As another measure of assembly quality one could assess the completeness of gene
 
 A minimum BUSCO command assuming it is installed on your system. Adjust input file (`-i`), output prefix (`-o`) and the `--lineage_dataset` paraemeter to your needs. Get a list of all available lineage datasets by running `busco --list-datasets`.
 ```bash
-(host)-$ busco -i assembly.fasta -o output_prefix -m genome --lineage_dataset gammaproteobacteria_odb10
+(short_assembly) (host)-$ busco -i assembly.fasta -o output_prefix -m genome --lineage_dataset gammaproteobacteria_odb10
 ```
 
 </details>
@@ -424,14 +425,14 @@ Assuming you've run Minia three times with a number of different k-mer sizes, bu
  - `minia/minia.61.contigs.fa`
 
 ```bash
-(host)-$ quast -o quast_results \
+(short_assembly) (host)-$ quast -o quast_results \
           minia/minia.*.contigs.fa
 ```
 Check out the file `quast_results/report.html` that has bee created (if you do this on a server you'll need to download the full directory `quast_results/` - double-clicking on quast_results/report.html will open the file in a webbrowser).
 
 or, more explicitly:
 ```bash
-(host)-$ quast -o quast_results \
+(short_assembly) (host)-$ quast -o quast_results \
           -m 1000 --labels minia.k41,minia.k51,minia.k61 \
           minia/minia.41.contigs.fa minia/minia.51.contigs.fa minia/minia.61.contigs.fa
 ```
@@ -447,7 +448,7 @@ Now to some other assemblers..
 
 Let's try SPAdes (minimum command example):
 ```bash
-(user@host)-$ spades.py -o spades-default \
+(short_assembly) (user@host)-$ spades.py -o spades-default \
                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
                -t 2 \
                -m 8 --only-assembler
@@ -491,7 +492,7 @@ Let's try SPAdes (minimum command example):
 >Compare the minia and spades results with quast.
 
 ```bash
-(host)-$ quast -o quast_results \
+(short_assembly) (host)-$ quast -o quast_results \
           -m 1000 \
           minia/minia.*.contigs.fa spades-default/scaffolds.fasta
 ```
@@ -512,13 +513,13 @@ __Well Done!!!!__
 
 And then some more optional tasks, if you have time..
 
-***TASK 7***
+***TASK 7 (OPTIONAL)***
 > Try out SpAdes with error correction - Docker image: `reslp/spades:3.15.3`
 
-***TASK 8***
+***TASK 8 (OPTIONAL)***
 > Try out Platanus - Docker image: `chrishah/platanus:v1.2.4`
 
-***TASK 9***
+***TASK 9 (OPTIONAL)***
 > Try out ABySS - Docker image: `reslp/abyss:2.2.5`
 
 
