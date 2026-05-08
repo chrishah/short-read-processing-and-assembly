@@ -53,7 +53,7 @@ When using Docker:
 ```
 ***TASK 5***
 
-When in the conda environment or fastp installed globally:
+When in the conda environment or installed globally:
 ```bash
 (short_assembly) (user@host)-$ flash -z -t 2 -o trimmed/reads.flash trimmed/reads.trimmed.pe.1.fastq.gz trimmed/reads.trimmed.pe.2.fastq.gz
 ```
@@ -70,7 +70,7 @@ When using Docker:
 
 ***TASK 6***
 
-When in the conda environment or fastp installed globally:
+When in the conda environment or installed globally:
 ```bash
 (short_assembly) (user@host)-$ for k in {51,61,71,81,91}
 do
@@ -99,7 +99,7 @@ done
 
 ***TASK 7***
 
-When in the conda environment or fastp installed globally:
+When in the conda environment or installed globally:
 ```bash
 #with ec
 (short_assembly) (user@host)-$ spades.py -o spades-ec-default \

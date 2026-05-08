@@ -326,6 +326,8 @@ Then adust the example command above to use the correct input files and write th
           -kmer-size 41 -abundance-min 2 -out minia/minia.41 -nb-cores 2
 ```
 
+The main result (the assembly) is in the file `minia/minia.41.contigs.fa`.
+
 __Congratulations, you have just assembled your first genomes!__ .. took me about a month to get there..
 
 <details>
