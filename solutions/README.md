@@ -168,8 +168,7 @@ When using Docker:
                -IP1 trimmed/reads.trimmed.pe.1.fastq trimmed/reads.trimmed.pe.2.fastq -t 2 2>&1 | tee platanus/platanus.gapclose.log 
  
 #quast (locally)
-(short_assembly) (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in reslp/quast:5.0.2 \
-               quast -o quast_results -m 1000 -t 2 \
+(short_assembly) (user@host)-$  quast -o quast_results -m 1000 -t 2 \
                --labels minia.k51,minia.k61,spades-default,spades-ec-default,platanus \
                minia/minia.51.contigs.fa minia/minia.61.contigs.fa \
                spades-default/scaffolds.fasta spades-ec-default/scaffolds.fasta \
@@ -227,8 +226,7 @@ When using Docker:
                se="/in/trimmed/reads.fastp.merged.fastq.gz /in/trimmed/reads.trimmed.unpaired.1.fastq.gz /in/trimmed/reads.trimmed.unpaired.2.fastq.gz" default 2>&1 | tee abyss/abyss.merged.51/abyss.log
 
 #quast
-(short_assembly) (user@host)-$ docker run --rm -v $(pwd):/in -u $(id -u):$(id -g) -w /in reslp/quast:5.0.2 \
-        quast -o quast_results -m 1000 --labels minia.k51,minia.k61,abyss.k51,abyss.k81 -t 2 \
+(short_assembly) (user@host)-$ quast -o quast_results -m 1000 --labels minia.k51,minia.k61,abyss.k51,abyss.k81 -t 2 \
         minia/minia.51.contigs.fa minia/minia.61.contigs.fa abyss/abyss.51/abyss-scaffolds.fa abyss/abyss.81/abyss-scaffolds.fa
 ```
 
