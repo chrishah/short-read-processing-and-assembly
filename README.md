@@ -93,7 +93,7 @@ Now that you had your first look at a fastq file, can you find at least two diff
 
 Now, let's have a quick look at the data quality in our files. You've probably seen [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) before so the most straightforward thing would be the following (if FastQC was installed on your machine):
 ```bash
-(user@host)-$ fastqc data/reads.1.fastq.gz
+(short_assembly) (user@host)-$ fastqc data/reads.1.fastq.gz
 ```
 
 Do inspect the resulting `*.html` reports which `fastqc` has produced. If you're working on a remote server you'll first need to download the report to your local computer. Ask your instructors if you need help.
@@ -145,7 +145,7 @@ Quick quality trimming with [fastp](https://github.com/OpenGene/fastp) may be do
 
 Now, let's run `fastp` with default settings.
 ```bash
-(user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+(short_assembly) (user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz
 ```
 
@@ -189,7 +189,7 @@ Fastp produces it's own html report. Do inspect it.
 
 To have a direct comparison we recommend to also run fastqc on the trimmed reads.
 ```bash
-(user@host)-$ fastqc trimmed/reads.trimmed.pe.1.fastq.gz
+(short_assembly) (user@host)-$ fastqc trimmed/reads.trimmed.pe.1.fastq.gz
 ```
 
 >[!IMPORTANT]
@@ -197,12 +197,12 @@ To have a direct comparison we recommend to also run fastqc on the trimmed reads
 
 Fastp has a large number of options and parameters to be changed. See all it has to offer by displaying the help.
 ```bash
-(user@host)-$ fastp -help
+(short_assembly) (user@host)-$ fastp -help
 ``` 
 
 If you wanted to be a bit more explicit about how you trim and also keep reads that are missing it's mate after trimming (sometimes called 'orphaned reads'), you could e.g. do something like this:
 ```bash
-(user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
+(short_assembly) (user@host)-$ fastp --in1 data/reads.1.fastq.gz --in2 data/reads.2.fastq.gz \
                --out1 trimmed/reads.trimmed.pe.1.fastq.gz --out2 trimmed/reads.trimmed.pe.2.fastq.gz \
                --unpaired1 trimmed/reads.trimmed.unpaired.1.fastq.gz --unpaired2 trimmed/reads.trimmed.unpaired.2.fastq.gz \
                --detect_adapter_for_pe --length_required 100 --qualified_quality_phred 30 --average_qual 20 --cut_right --cut_mean_quality 25 \

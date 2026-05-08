@@ -26,6 +26,24 @@
 ```
 
 ***TASK 4***
+When in the conda environment or fastp installed globally.
+```bash
+(short_assembly) (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
+                fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --merge --merged_out trimmed/reads.fastp.merged.fastq.gz \
+                --out1 trimmed/reads.fastp.notmerged.1.fastq.gz --out2 trimmed/reads.fastp.notmerged.2.fastq.gz \
+                --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
+```
+Using Singularity
+```bash
+(user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
+                fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --merge --merged_out trimmed/reads.fastp.merged.fastq.gz \
+                --out1 trimmed/reads.fastp.notmerged.1.fastq.gz --out2 trimmed/reads.fastp.notmerged.2.fastq.gz \
+                --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
+```
+
+Using Docker
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
                 fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
@@ -33,7 +51,6 @@
                 --out1 trimmed/reads.fastp.notmerged.1.fastq.gz --out2 trimmed/reads.fastp.notmerged.2.fastq.gz \
                 --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
 ```
-
 ***TASK 5***
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/flash:1.2.11 \
