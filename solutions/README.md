@@ -26,15 +26,15 @@
 ```
 
 ***TASK 4***
-When in the conda environment or fastp installed globally.
+
+When in the conda environment or fastp installed globally:
 ```bash
-(short_assembly) (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
-                fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
+(short_assembly) (user@host)-$ fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
                 --merge --merged_out trimmed/reads.fastp.merged.fastq.gz \
                 --out1 trimmed/reads.fastp.notmerged.1.fastq.gz --out2 trimmed/reads.fastp.notmerged.2.fastq.gz \
                 --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
 ```
-Using Singularity
+When using Singularity:
 ```bash
 (user@host)-$ singularity exec docker://chrishah/fastp:0.23.1 \
                 fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
@@ -43,7 +43,7 @@ Using Singularity
                 --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
 ```
 
-Using Docker
+When using Docker:
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/fastp:0.23.1 \
                 fastp --in1 trimmed/reads.trimmed.pe.1.fastq.gz --in2 trimmed/reads.trimmed.pe.2.fastq.gz \
@@ -52,12 +52,42 @@ Using Docker
                 --thread 2 --html trimmed/merging.report.html --json trimmed/merging.report.json
 ```
 ***TASK 5***
+
+When in the conda environment or fastp installed globally:
+```bash
+(short_assembly) (user@host)-$ flash -z -t 2 -o trimmed/reads.flash trimmed/reads.trimmed.pe.1.fastq.gz trimmed/reads.trimmed.pe.2.fastq.gz
+```
+When using Singularity:
+```bash
+(user@host)-$ singularity exec docker://chrishah/flash:1.2.11 \
+                flash -z -t 2 -o trimmed/reads.flash trimmed/reads.trimmed.pe.1.fastq.gz trimmed/reads.trimmed.pe.2.fastq.gz
+```
+When using Docker:
 ```bash
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/in -w /in chrishah/flash:1.2.11 \
                 flash -z -t 2 -o trimmed/reads.flash trimmed/reads.trimmed.pe.1.fastq.gz trimmed/reads.trimmed.pe.2.fastq.gz
 ```
 
 ***TASK 6***
+
+When in the conda environment or fastp installed globally:
+```bash
+(short_assembly) (user@host)-$ for k in {51,61,71,81,91}
+do
+        minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+        -kmer-size $k -abundance-min 2 -max-memory 2000 -out minia/minia.$k -nb-cores 1
+done
+```
+When using Singularity:
+```bash
+(user@host)-$ for k in {51,61,71,81,91}
+do
+        singularity exec docker://chrishah/minia:3.2.4 \
+        minia -in trimmed/reads.trimmed.pe.1.fastq.gz -in trimmed/reads.trimmed.pe.2.fastq.gz \
+        -kmer-size $k -abundance-min 2 -max-memory 2000 -out minia/minia.$k -nb-cores 1
+done
+```
+When using Docker:
 ```bash
 (user@host)-$ for k in {51,61,71,81,91}
 do
@@ -68,6 +98,27 @@ done
 ```
 
 ***TASK 7***
+
+When in the conda environment or fastp installed globally:
+```bash
+#with ec
+(short_assembly) (user@host)-$ spades.py -o spades-ec-default \
+                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --checkpoints last \
+                -t 2 \
+                -m 8
+```
+When using Singularity:
+```bash
+#with ec
+(user@host)-$ singularity exec docker://reslp/spades:3.15.3 \
+               spades.py -o spades-ec-default \
+                -1 trimmed/reads.trimmed.pe.1.fastq.gz -2 trimmed/reads.trimmed.pe.2.fastq.gz \
+                --checkpoints last \
+                -t 2 \
+                -m 8
+```
+When using Docker:
 ```bash
 #with ec
 (user@host)-$ docker run --rm -u $(id -u):$(id -g) -v $(pwd)/:/in -w /in reslp/spades:3.15.3 \

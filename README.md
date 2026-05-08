@@ -219,7 +219,7 @@ We noted before that under certain circumstances read pairs might overlap. The e
 There are many other tools that do read-merging. Another example is [FlasH](https://ccb.jhu.edu/software/FLASH/). 
 
 ***TASK 5***
-> Try out FlasH - a docker image is prepared for you: `chrishah/flash:1.2.11`
+> Try out FlasH - `flash` should be available in your conda enviroment, or use the following docker image `chrishah/flash:1.2.11`
 
 ## Kmer counting
 
